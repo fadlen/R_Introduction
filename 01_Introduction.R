@@ -149,7 +149,7 @@ A
 
 # Diagonal and identity matrices:
 diag( c(4,2,6))
-diag(3)
+diag(3)  # identity matrix
 
 # Indexing for extracting elements (still using A from above):
 A
@@ -158,3 +158,57 @@ A[,2]
 A[,c(1,3)]
 
 #### Script 1.10 "Matrix-Operators" ####
+A <- matrix(c(2, -4,-1,5,7,0), nrow=2)
+B <- matrix(c(2,1,0,3,-1,5), nrow=2)
+
+A
+B
+A+B
+
+# Transpose:
+(C <- t(B))
+
+# Matrix multiplication:
+(D <- A %*% C)  
+
+# Inverse:
+solve(D)
+
+#### Script 1.11 "Lists" ####
+
+# Generate a list object:
+mylist <- list( A=seq(8,36,4), this="that", idm = diag(3))
+
+# Print whole list:
+mylist
+
+# Vector of names:
+names(mylist)
+
+#Print component "A":
+mylist$A
+
+#### Script 1.12 "Data-Frames" ####
+# Define one x vector for all:
+year <- c(2008,2009,2010,2011,2012,2013)
+
+# Define a matrix of y values:
+product1 <- c(0,3,6,9,7,8); product2 <- c(1,2,3,5,9,6); product3 <- c(2,4,4,2,3,2)
+
+sales_mat <- cbind(product1,product2,product3)
+sales_mat
+
+rownames(sales_mat) <- year
+
+# The matrix looks like this:
+sales_mat
+
+# Create a data frame and display it:
+sales <- as.data.frame(sales_mat)
+sales
+
+# The Difference between sales_mat and sales is the reports of contents.  #
+# In the Global Environment (right, top corner) are sales_mat still a 6x3 #
+# double matrix, whereas the content of sales is 6 obs. of 3 variables!   #
+
+#### Script 1.13 "Data-Frame-Vars" ####
