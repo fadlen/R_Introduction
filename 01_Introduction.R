@@ -212,3 +212,188 @@ sales
 # double matrix, whereas the content of sales is 6 obs. of 3 variables!   #
 
 #### Script 1.13 "Data-Frame-Vars" ####
+
+# Accessing a single variable:
+sales$product1
+
+# Generating a new variable in the dataframe:
+sales$totalv1 <- sales$product1 + sales$product2 + sales$product3
+
+# The same but using with:
+sales$totalv2 <- with(sales, product1+product2+product3)
+
+# The same using "attach":
+attach(sales)
+sales$totalv3 <- product1+product2+product3
+detach(sales)
+
+# Result:
+sales
+
+#### Script 1.14 "Data-Frames-Subsets" ####
+
+# Full data frame:
+sales
+
+# Subset: all years in which sales of product 3 were >= 3:
+subset(sales, product3>=3)
+
+#### Script 1.15 "RData-Example" ####
+
+# Note: "sales" is defined in Data-Frames, so it has to be run first!
+# save data frame as RData file (in the current working directory):
+save(sales, file = "oursalesdata.RData")
+
+# remove data frame "sales" from memory:
+rm(sales)
+
+# Does variable "sales" exist?:
+exists("sales")
+
+# Load data set (in the current working directory):
+load("oursalesdata.RData")
+
+# Does variable "sales" exist?:
+exists("sales")
+sales
+
+# averages of the variables:
+colMeans(sales)
+
+#### Script 1.16 "Example-Data" ####
+
+# load package for dealing with Stata files:
+library(foreign)
+
+# download data and create data frame "affairs":
+affairs <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/affairs.dta")
+
+# first six rows:
+head(affairs)
+
+# averages:
+colMeans((affairs))
+
+#### Script 1.17 "Plot-Overlays" ####
+
+x<- c(1,3,4,7,8,9)
+y<- c(0,3,6,9,7,8)
+#plot(x,y)
+plot(x,y,type="o")
+
+plot(x,y, main = "Example for an Outliner")
+points(8,1)
+abline(a=0.31, b=0.97, lty=2, lwd=2)
+text(7,2, "outlier", pos=3)
+arrows(7,2,8,1, length = 0,15)
+
+#### Script 1.18 "Plot-Matplot" ####
+
+# Define one x vector for all:
+year <- c(2008,2009,2010,2011,2012,2013)
+
+# Define a matrix of y values:
+product1 <- c(0,3,6,9,7,8)
+product2 <- c(1,2,3,5,9,6)
+product3 <- c(2,4,4,2,3,2)
+
+sales <- cbind(product1,product2,product3)
+sales
+
+# plot
+matplot(year, sales, type="b", lwd=c(1,2,3), col = "black")
+
+#### Script 1.19 "Plot-Legend" ####
+
+curve( dnorm(x,0,1), -10, 10, lwd=1, lty=1)
+curve( dnorm(x,0,2), add = TRUE, lwd=2, lty=2)
+curve( dnorm(x,0,3), add = TRUE, lwd=3, lty=3)
+# Add the legend:
+legend("topright", c("sigma=1", "sigma=2", "sigma=3"), lwd = 1:3, lty = 1:3)
+
+#### Script 1.20 "Plot-Legend2" ####
+
+curve( dnorm(x,0,1), -10, 10, lwd=1, lty=1)
+curve( dnorm(x,0,2), add = TRUE, lwd=2, lty=2)
+curve( dnorm(x,0,3), add = TRUE, lwd=3, lty=3)
+# Add the legend with GREEk sigma:
+legend("topright", expression(sigma==1, sigma==2, sigma==3), lwd = 1:3, lty = 1:3)
+# Add the text with the formula, centered at x=6 and y=0.3:
+text(6,.3, expression(f(x)==frac(1,sqrt(2*pi)*sigma)*e^(-frac(x^2,2*sigma^2))))
+
+
+#### Script 1.22 "Descr-Tables" ####
+
+# load data set
+library(foreign)
+affairs <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/affairs.dta")
+
+# Generate "Factors" to attach labels
+haskids <- factor(affairs$kids, labels = c("no", "yes"))
+mlab <- c("very unhappy", "unhappy", "average", "happy", "very happy")
+marriage <- factor(affairs$ratemarr, labels=mlab)
+
+# Frequencies for having kids
+table(haskids)
+
+# Marriage ratings(share):
+prop.table(table(marriage))
+
+
+# Contigency table: counts(display & store in var.)
+(countsstab <- table(marriage,haskids))
+
+# Share within "marriage" (i.e. within a row):
+prop.table(countsstab, margin = 1)
+
+# Share within "haskids" (i.e. within a column):
+prop.table(countsstab, margin = 2)
+
+# Graphics
+pie(table(marriage), col = gray(seq(.2,1,.2)))
+barplot(table(haskids,marriage), horiz = TRUE, las=1, legend=TRUE, args.legend = c(x="bottomright"), main = "Happiness by Kids")
+
+#### Script 1.23 "Histogram" ####
+
+# Load data:
+library(foreign)
+ceosal1 <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/ceosal1.dta")
+
+# Extract ROE to single vector:
+ROE <- ceosal1$roe
+
+# Subfigure (a): histogram(counts):
+hist(ROE)
+
+# Subfigure (b): histogram (densities, explicit breaks):
+hist(ROE, breaks = c(0,5,10,20,30,60))
+
+#### Script 1.24 "KDensity" ####
+
+# Subfigure: kernel density estimate:
+plot(density(ROE))
+
+# Subfigure: overlay:
+hist(ROE, freq = FALSE, ylim = c(0, .07))
+lines(density(ROE), lwd=3)
+
+#### Script 1.25 "Desc-Stats ####
+
+library(foreign)
+ceosal1 <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/ceosal1.dta")
+
+# sample average:
+mean(ceosal1$salary)
+
+# sample median:
+median(ceosal1$salary)
+
+# standard deviation:
+sd(ceosal1$salary)
+
+# summary informations:
+summary(ceosal1$salary)
+
+# correlation with ROE:
+cor(ceosal1$salary,ceosal1$roe)
+
