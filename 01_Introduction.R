@@ -397,3 +397,67 @@ summary(ceosal1$salary)
 # correlation with ROE:
 cor(ceosal1$salary,ceosal1$roe)
 
+
+#### Script 1.26 "PMF-Example" ####
+
+# Pedestrian approach: 
+choose(10,2) * 0.2^2 * 0.8^8
+
+# Built-in function
+dbinom(2,10,0.2)
+
+# Values for x: all between 0 and 10:
+x <- seq(0,10)
+
+# pmf for all these values:
+fx <- dbinom(x,10,0.2)
+
+# Table(matrix) of values:
+cbind(x, fx)
+
+# Plot
+plot(x, fx, type="h")
+
+## Cumulative Distribution (CDF)
+
+pbinom(3,10, 0.2)
+
+pnorm(1.96) - pnorm(-1.96)
+
+# Using the transformation:
+pnorm(2/3) - pnorm(-2/3)
+
+# Working directly with the distribution of X:
+pnorm(6,4,3) - pnorm(2,4,3)
+
+1 - pnorm(2,4,3) + pnorm(-2,4,3)
+
+x <- seq(-1,10)
+Fx <- pbinom(x, 10, 0.2)
+plot(x, Fx, type ="s")
+curve(pnorm(x), -4,4)
+
+qnorm(0.975)
+rbinom(10,1,0.5)
+rnorm(10)
+
+#### Script 1.27 "Random-Numbers" ####
+
+# Sample from a standard normal RV with sample size n=5:
+rnorm(5)
+
+# A different sample from the same distribution:
+rnorm(5)
+
+# Set the seed of the random number generator and take two samples:
+set.seed(6254137)
+
+rnorm(5)
+rnorm(5)
+
+# Reset the seed to same value to get the same samples again
+set.seed(6254137)
+
+rnorm(5)
+rnorm(5)
+
