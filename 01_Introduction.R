@@ -461,3 +461,197 @@ set.seed(6254137)
 rnorm(5)
 rnorm(5)
 
+#### Script 1.28 "Example-C-2" ####
+
+# Manually enter raw data from Wooldridge, Table C.3:
+SR87 <- c(10,1,6,.45,1.25,1.3,1.06,3,8.18,1.67,.98,1,.45,5.03,8,9,18,.28,7,3.97)
+
+SR88 <- c(3,1,5,.5,1.54,1.5,.8,2,.67,1.17,.51,.5,.61,6.7,4,7,19,.2,5,3.83)
+
+# Calculate Change (the parentheses just display the results):
+(Change <- SR88 - SR87)
+
+# Ingredients to CI formula
+(avgCh <- mean (Change))
+(n <- length(Change))
+(sdCh <- sd(Change))
+(se <- sdCh/sqrt(n))
+(c <- qt(.975, n-1))
+
+# Confidence intervall:
+c(avgCh - c*se, avgCh + c*se)
+
+
+#### Script 1.29 "Example-C-3" ####
+
+library(foreign)
+
+audit <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/audit.dta")
+
+# Ingredients to CI formula
+(avgy <- mean(audit$y))
+(n <- length(audit$y))
+(sdy <- sd(audit$y))
+(se <- sdy/sqrt(n))
+(c <- qnorm(.975))
+
+# 95% Confidence interval:
+avgy + c * c(-se, +se)
+
+# 99% Confidence interval:
+avgy + qnorm(0.995) * c(-se,+se)
+
+#### Script 1.30  "Critical-Values-t" ####
+
+# degrees of freedom = n-1:
+df <- 19
+
+# significance levels:
+alpha.one.tailed = c (0.1,0.05,0.025,0.01, 0.005, .001)
+alpha.two.tailed = alpha.one.tailed * 2
+
+# critical values & table:
+CV <- qt(1- alpha.one.tailed, df)
+
+cbind(alpha.one.tailed, alpha.two.tailed, CV)
+
+#### Script 1.31 "Example-C-5" ####
+# Note: we reuse variables from Example-C-3.R (Script 1.29). Is has to be run first!
+# t statistics for H0: mu=0:
+(t <- avgy/se)
+
+# Critical values for t distribution with n-1=240 d.f.:
+alpha.one.tailed = c (0.1,0.05,0.025,0.01, 0.005, .001)
+CV <- qt(1- alpha.one.tailed, n-1)
+
+cbind(alpha.one.tailed, CV)
+
+#### Script 1.32 "Example-C-6" ####
+# Note: Run Script 1.29 First!!! (Example-C-2!)
+# t statistics for H0: mu=0:
+(t <- avgCh/se)
+
+# p value
+(p <- pt(t,n-1))
+
+
+#### Script 1.33 "Example-C-7" ####
+# t statistics for H0: mu=0:
+(t <- -4.276816)
+
+# p value
+(p <- pt(t,n-1))
+
+#### Script 1.34 "Example-C2-C6" ####
+# data for the scrap rates examples:
+SR87 <- c(10,1,6,.45,1.25,1.3,1.06,3,8.18,1.67,.98,1,.45,5.03,8,9,18,.28,7,3.97)
+
+SR88 <- c(3,1,5,.5,1.54,1.5,.8,2,.67,1.17,.51,.5,.61,6.7,4,7,19,.2,5,3.83)
+Change <- SR88 - SR87
+
+# Example C.2: two-sided CI:
+t.test(Change)
+
+# Example C.6: one-sided test:
+t.test(Change, alternative = "less")
+
+#### Script 1.35 "Examples-C3-C5-C7" ####
+library(foreign)
+
+audit <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/audit.dta")
+
+# Example C.3: two-sided CI
+t.test(audit$y)
+
+# Example C.5 & C.7: one-sided test:
+t.test(audit$y, alternative = "less")
+
+#### Script 1.36 "Test-Results-List" ####
+library(foreign)
+
+audit <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/audit.dta")
+# store test results as a list "testres":
+testres <- t.test(audit$y)
+
+#print results:
+testres
+
+# component names: which results can be accessed?
+names(testres)
+
+# p-value
+testres$p.value
+
+#### Script 1.37 "Simulate-Estimate" ####
+# Set the random seed
+set.seed(123456)
+
+# Draw a sample given the population parameters
+sample <- rnorm(100,10,2)
+
+# Estimate the population mean with the sample average:
+mean(sample)
+
+# Draw a different sample and estimate again:
+sample <- rnorm(100,10,2)
+mean(sample)
+
+# Draw a third sample and estimate again:
+sample <- rnorm(100,10,2)
+mean(sample)
+
+#### Script 1.38 "Simulation-Repeated" ####
+# Set the random seed:
+set.seed(123456)
+
+# initialize ybar to a vector of length r=10000 to later store results:
+ybar <- numeric(10000)
+
+# repeat 10000 times:
+for(i in 1:10000) {
+  # Draw a sample and store the sample mean in pos. i = 1,2, of ybar:
+  sample <- rnorm(100,10,2)
+  ybar[i] <- mean(sample)
+}
+
+#### Script 1.39 "Simulation-Repeated-Results" ####
+# The first 20 of 10000 estimates:
+ybar[1:20]
+
+# Simulated mean:
+mean(ybar)
+
+# Simulated variance:
+var(ybar)
+
+# Simulated density:
+plot(density(ybar))
+curve( dnorm(x,10,sqrt(.04)), add=TRUE,lty=2)
+
+
+#### Script 1.40 "Simulation-Inference" ####
+# Set the random seed:
+set.seed(123456)
+
+# initialize vectors to later store results:
+CIlower <- numeric(10000); CIupper <- numeric(10000)
+pvalue1 <- numeric(10000); pvalue2 <- numeric(10000)
+
+# repeat 10000 times:
+for(i in 1:10000) {
+  # Draw a sample
+  sample <- rnorm(100,10,2)
+  # test the (correct) null hypothesis mu=10:
+  testres1 <- t.test(sample, mu=10)
+  # store CI & p value
+  CIlower[i] <- testres1$conf.int[1]
+  CIupper[i] <- testres1$conf.int[2]
+  pvalue1[i] <- testres1$p.value
+  # test the (incorrect) null hypothesis mu=9.5 & store the p value:
+  pvalue2[i] <- t.test(sample, mu=9.5)$p.value
+}
+
+# Test results as logical value
+reject1 <- pvalue1<=0.05; reject2<-pvalue2<=0.05
+table(reject1)
+table(reject2)
