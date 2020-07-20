@@ -1,4 +1,4 @@
-##### Chapter 03: Mutiple Regression Analysis: Estimation
+##### Chapter 03: Multiple Regression Analysis: Estimation
 # Nachbau der im "Heiss 2016: Using R for introductory econometrics" abgebildeten Skripte und Codes. #
 
 #### Script 3.1 "Example-3-1" ####
